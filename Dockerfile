@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build
+FROM 10.0.1.123:5000/debian:12-slim AS build
 WORKDIR /app
 
 # Separate layers here to avoid redoing dependencies on code change.
@@ -10,7 +10,7 @@ RUN dotnet restore
 COPY . .
 RUN dotnet publish -r linux-musl-x64 -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/core/runtime-deps:3.1-alpine AS runtime
+FROM 10.0.1.123:5000/debian:12-slim AS runtime 
 WORKDIR /app
 COPY --from=build /app/out .
 
