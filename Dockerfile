@@ -1,4 +1,4 @@
-FROM /debian:12-slim AS build
+FROM 192.168.248.2:5000/debian:12-slim AS build
 WORKDIR /app
 
 # Separate layers here to avoid redoing dependencies on code change.
@@ -10,7 +10,7 @@ RUN dotnet restore
 COPY . .
 RUN dotnet publish -r linux-musl-x64 -c Release -o out
 
-FROM /debian:12-slim AS runtime 
+FROM 192.168.248.2:5000/debian:12-slim AS runtime 
 WORKDIR /app
 COPY --from=build /app/out .
 
