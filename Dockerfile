@@ -1,4 +1,4 @@
-FROM 192.168.248.2:5000/debian:12-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-bookworm-slim AS build
 WORKDIR /app
 
 # Separate layers here to avoid redoing dependencies on code change.
@@ -8,9 +8,9 @@ RUN dotnet restore
 
 # Now the code.
 COPY . .
-RUN dotnet publish -r linux-musl-x64 -c Release -o out
+RUN dotnet publish --self-contained -r debian.12-x64 -c Release -o out
 
-FROM 192.168.248.2:5000/debian:12-slim AS runtime 
+FROM mcr.microsoft.com/dotnet/runtime:6.0-bookworm-slim AS runtime 
 WORKDIR /app
 COPY --from=build /app/out .
 
